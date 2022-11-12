@@ -13,23 +13,15 @@ import com.udacity.asteroidradar.R
 
 class MainFragment : Fragment() {
 
-    private val viewModel: MainViewModel by lazy {
-        val activity = requireNotNull(this.activity) {
-            "You can only access the viewModel after onViewCreated()"
-        }
-        ViewModelProvider(this, Factory(activity.application)).get(MainViewModel::class.java)
-
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val binding = FragmentMainBinding.inflate(inflater)
-        binding.lifecycleOwner = this
-
         binding.viewModel = viewModel
+        binding.lifecycleOwner = this
    // asteroid clicked this block or lambda will be called by MainAdapter
         val adapter=AsteroidsAdapter(AsteroidsListener {
-            asteroid->view?.findNavController()?.navigate(MainFragmentDirections.actionShowDetail(asteroid))
+            asteroid->view?.findNavController()?.
+        navigate(MainFragmentDirections.actionShowDetail(asteroid))
         })
         binding.asteroidRecycler.adapter=adapter
         viewModel.selectedProperty.observe(viewLifecycleOwner, Observer {
@@ -42,10 +34,11 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_overflow_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    private val viewModel: MainViewModel by lazy {
+        val activity = requireNotNull(this.activity)
+        ViewModelProvider(this, Factory(activity.application)).get(MainViewModel::class.java)
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val selectedDateItem= when (item.itemId) {
@@ -56,4 +49,10 @@ class MainFragment : Fragment() {
         viewModel.applyFilter(selectedDateItem)
         return true
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_overflow_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
 }
