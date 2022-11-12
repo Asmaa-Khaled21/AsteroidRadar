@@ -1,12 +1,10 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.Repo
-import com.udacity.asteroidradar.Util
+import com.udacity.asteroidradar.api.Util
 import com.udacity.asteroidradar.domain.Asteroid
 import kotlinx.coroutines.launch
 

@@ -3,6 +3,8 @@ package com.udacity.asteroidradar
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.udacity.asteroidradar.api.AsteroidApi
+import com.udacity.asteroidradar.api.Constants
+import com.udacity.asteroidradar.api.Util
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.database.asDomainObj
@@ -20,9 +22,9 @@ import java.util.*
 
 class Repo(val database: AsteroidDatabase) {
     val date =  Calendar.getInstance().time
-    val startDate = Util.formattedString (date,Constants.API_QUERY_DATE_FORMAT)
+    val startDate = Util.formattedString (date, Constants.API_QUERY_DATE_FORMAT)
     val addedDays = Util.addDaysToDate (date,7)
-    val endDate = Util.formattedString (addedDays,Constants.API_QUERY_DATE_FORMAT)
+    val endDate = Util.formattedString (addedDays, Constants.API_QUERY_DATE_FORMAT)
 
     val asteroidAll: LiveData<List<Asteroid>>
     =Transformations.map(database.asteroidDAO.getAsteroid()){
