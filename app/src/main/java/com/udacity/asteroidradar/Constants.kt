@@ -9,20 +9,3 @@ object Constants {
     const val BASE_URL = "https://api.nasa.gov/"
     const val MY_API_KEY="6jcEidRaxbyvJisbR1Rme1IghedUYLy9JsC8K5f8"
 }
-     object Dates{
-        fun convertDateStringToFormattedString
-                    (date: Date, format: String, locale: Locale = Locale.getDefault()) : String {
-            val formatter = SimpleDateFormat(format, locale)
-            return formatter.format(date)
-        }
-
-        fun addDaysToDate(date: Date, daysToAdd: Int) : Date {
-            val c = Calendar.getInstance()
-            c.time = date
-            c.add(Calendar.DATE, daysToAdd)
-            return c.time
-        }
-    }
-
-enum class AsteroidFilter(val value: String) {
-    SHOW_SAVED("saved"), SHOW_TODAY("today"), SHOW_WEEK("week") }

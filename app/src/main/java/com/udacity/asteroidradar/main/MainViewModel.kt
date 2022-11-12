@@ -4,61 +4,46 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import androidx.lifecycle.*
-import com.udacity.asteroidradar.AsteroidFilter
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.Repo
+import com.udacity.asteroidradar.Util
+import com.udacity.asteroidradar.domain.Asteroid
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 
 class MainViewModel(app: Application) : ViewModel() {
-        private val _connection=MutableLiveData<Boolean>()
-        val connection:LiveData<Boolean>
-        get()=_connection
-        val filter=MutableLiveData(AsteroidFilter.SHOW_SAVED)
-        private val database=AsteroidDatabase.getDatabase(app)// create database
-        private val repository= Repo(database)
-        val image=repository.image
-    fun isNetworkAvailable(context: Context): Boolean {// needs manifest permission
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!
-            .isConnected
-    }
 
+        private val database=AsteroidDatabase.getDatabase(app)
+        private val repositoryAstroid= Repo(database)
+        val image=repositoryAstroid.image
 
+    private val asteroidFilter = MutableLiveData(Util.AsteroidFilter.SHOW_SAVED)
+
+    private val repo = Repo(database)
     init {
-         Timber.plant(Timber.DebugTree())
-        _connection.value=false
         viewModelScope.launch {
-        if (isNetworkAvailable(app))  // check for connection status
-        {
-            repository.refresh()
-            Timber.i("good connection")
+            repo.refresh()
         }
-
-        else
-        {
-            _connection.value=true
-
-            Timber.i("No enternet connection")
-        }
-      }
     }
-    fun connecctivity() {
-        _connection.value=false
+
+    private val _asteroidSelected = MutableLiveData<Asteroid?>()
+    val selectedProperty: MutableLiveData<Asteroid?>
+        get() = _asteroidSelected
+    fun displayAsteroid() {
+        _asteroidSelected.value = null
     }
-    val aasteroid = Transformations.switchMap(filter){
+
+    val asteroids = Transformations.switchMap(asteroidFilter){
         when (it) {
-            AsteroidFilter.SHOW_TODAY -> repository.asteroidToday
-            AsteroidFilter.SHOW_WEEK -> repository.asteroidWeek
-            else -> repository.asteroidAll
+            Util.AsteroidFilter.SHOW_TODAY -> repositoryAstroid.asteroidToday
+            Util.AsteroidFilter.SHOW_WEEK -> repositoryAstroid.asteroidWeek
+            else -> repositoryAstroid.asteroidAll
         }
     }
-fun applyFilter(selectedDateItem: AsteroidFilter) {
-    filter.value=selectedDateItem } }
+fun applyFilter(selectedDateItem: Util.AsteroidFilter) {
+    asteroidFilter.value=selectedDateItem } }
 
- //Factory for constructing MainViewModel with parameter
+ //    Factory for constructing MainViewModel with parameter
 class Factory(val app: Application) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {

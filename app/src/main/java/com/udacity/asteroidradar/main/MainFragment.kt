@@ -1,15 +1,15 @@
 package com.udacity.asteroidradar.main
 
 import android.os.Bundle
-import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.udacity.asteroidradar.AsteroidFilter
-import com.udacity.asteroidradar.R
+import android.view.*
+import androidx.navigation.fragment.findNavController
+import com.udacity.asteroidradar.Util
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
+import androidx.lifecycle.Observer
+import com.udacity.asteroidradar.R
 
 class MainFragment : Fragment() {
 
@@ -32,13 +32,12 @@ class MainFragment : Fragment() {
             asteroid->view?.findNavController()?.navigate(MainFragmentDirections.actionShowDetail(asteroid))
         })
         binding.asteroidRecycler.adapter=adapter
-        viewModel.connection.observe(viewLifecycleOwner, Observer {
-            // Must find the NavController from the Fragment
-             check-> if (check) {
-       Toast.makeText(context,"Connection error connect to network",Toast.LENGTH_SHORT).show()
-        viewModel.connecctivity() }
-
-})
+        viewModel.selectedProperty.observe(viewLifecycleOwner, Observer {
+            if ( null != it ) {
+                this.findNavController().navigate(MainFragmentDirections.actionShowDetail(it))
+                viewModel.displayAsteroid()
+            }
+        })
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -50,9 +49,9 @@ class MainFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val selectedDateItem= when (item.itemId) {
-            R.id.show_all_menu->AsteroidFilter.SHOW_WEEK
-            R.id.show_buy_menu->AsteroidFilter.SHOW_SAVED
-            else->AsteroidFilter.SHOW_TODAY
+            R.id.show_all_menu->Util.AsteroidFilter.SHOW_WEEK
+            R.id.show_buy_menu-> Util.AsteroidFilter.SHOW_SAVED
+            else->Util.AsteroidFilter.SHOW_TODAY
         }
         viewModel.applyFilter(selectedDateItem)
         return true
