@@ -38,8 +38,6 @@ class MainFragment : Fragment() {
         val activity = requireNotNull(this.activity)
         ViewModelProvider(this, Factory(activity.application)).get(MainViewModel::class.java)
     }
-
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val selectedDateItem= when (item.itemId) {
             R.id.show_all_menu-> Util.AsteroidFilter.SHOW_WEEK
@@ -49,10 +47,8 @@ class MainFragment : Fragment() {
         viewModel.applyFilter(selectedDateItem)
         return true
     }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_overflow_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
-
 }
