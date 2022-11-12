@@ -51,7 +51,7 @@ fun fill(recyclerView: RecyclerView,list: List<Asteroid>?) {
 val adapter=recyclerView.adapter as AsteroidsAdapter
     adapter.submitList(list)
 }
-// Binding adapter used to display images from URL using Glide
+
 @BindingAdapter("imageOfTheDay")
 fun imageOfTheDay(imageView: ImageView,url:String?)
 {
@@ -59,7 +59,7 @@ fun imageOfTheDay(imageView: ImageView,url:String?)
         Picasso.get().load(url).placeholder(R.drawable.placeholder_picture_of_day ).
     error(R.drawable.ic_broken_image).into(imageView)
 }
-//////////// progressbar
+
 @BindingAdapter("progressStatus")
 fun progressStatus(view: View, image: com.udacity.asteroidradar.domain.Image?) {
     view.visibility =

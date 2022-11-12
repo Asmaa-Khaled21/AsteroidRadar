@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import android.view.*
 import androidx.navigation.fragment.findNavController
-import com.udacity.asteroidradar.Util
+import com.udacity.asteroidradar.api.Util
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import androidx.lifecycle.Observer
 import com.udacity.asteroidradar.R
@@ -49,9 +49,9 @@ class MainFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val selectedDateItem= when (item.itemId) {
-            R.id.show_all_menu->Util.AsteroidFilter.SHOW_WEEK
+            R.id.show_all_menu-> Util.AsteroidFilter.SHOW_WEEK
             R.id.show_buy_menu-> Util.AsteroidFilter.SHOW_SAVED
-            else->Util.AsteroidFilter.SHOW_TODAY
+            else-> Util.AsteroidFilter.SHOW_TODAY
         }
         viewModel.applyFilter(selectedDateItem)
         return true

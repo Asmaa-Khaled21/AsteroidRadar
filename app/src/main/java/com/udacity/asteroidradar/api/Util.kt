@@ -1,4 +1,4 @@
-package com.udacity.asteroidradar
+package com.udacity.asteroidradar.api
 
 import java.text.SimpleDateFormat
 import java.util.*
@@ -7,7 +7,7 @@ class Util {
 
     companion object {
         fun formattedString
-                    (date: Date , format: String , locale : Locale = Locale.getDefault()
+                    ( date: Date , format: String , locale : Locale = Locale.getDefault()
         ) : String {
             val format = SimpleDateFormat(format, locale)
             return format.format(date)
